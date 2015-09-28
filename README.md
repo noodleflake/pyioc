@@ -1,11 +1,11 @@
 # pyioc
-`pyioc` is a single file IoC (or ServiceLocator) in Python ([Python](https://www.python.org)) for resolving (locating) services anywhere in your scripts.
+`pyioc` is a single file IoC (or ServiceLocator) in [Python](https://www.python.org) for resolving (locating) services anywhere in your scripts.
 
 # Features
 * [x] Lifetime containers
 * [x] Singleton and Instance containers
-* [x] Automatically resolve instance and pass onto another objects __init__ function
-* [x] Use 'key' or 'type' to a resolve service
+* [x] Automatically resolve instance and pass it onto another objects __init__ function
+* [x] Use 'key' and\or 'type' to a resolve a service
 
 ## Installation
 
@@ -13,7 +13,7 @@
     
 ## Sample Usage
 
-In the repository see `sample` directory
+In the pyioc repository see `sample` directory
 
 ```python
 from libs.service_locator import ServiceLocator
@@ -21,10 +21,14 @@ from libs.service_locator import ServiceLocator
 #Singleton Register
 ServiceLocator.register(Smtp())
 ServiceLocator.register(Smtp(), 'with_key')
+ServiceLocator.register(PostgresConnection('ConnectionStringHere'))
 
 #Dynamic Register
 ServiceLocator.register(Smtp)
 ServiceLocator.register(Smtp, 'with_key')
+ServiceLocator.register(PostgresConnection)
+#Below we tell the locator to use a static value when resolving\instantiating 'PostgresConnection'
+ServiceLocator.map_parameter_to_static(PostgresConnection, 'connection_string', 'ConnectionStringHere')
 
 #Resolve
 ServiceLocator.resolve(Smtp)
