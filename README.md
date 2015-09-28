@@ -17,27 +17,38 @@ In the pyioc repository see `sample` directory
 ```python
 from libs.service_locator import ServiceLocator
 
-#Singleton Register
+#Either Register Singleton (Entire lifetime of application)
 postgres_connection = PostgresConnection('ConnectionStringHere')
 smtp = Smtp(postgres_connection)
 ServiceLocator.register(postgres_connection)
 ServiceLocator.register(smtp)
 ServiceLocator.register(smtp, 'with_key')
 
-#Dynamic Register
+#OR Register Dynamic (New instance when resolved)
 ServiceLocator.register(PostgresConnection)
 ServiceLocator.register(Smtp)
 ServiceLocator.register(Smtp, 'with_key')
 
+#map_parameter_to_static and map_parameter_to_service is only applicable to dynamic instances
 #We tell the locator to use a static value when resolving\instantiating 'PostgresConnection'
-ServiceLocator.map_parameter_to_static(PostgresConnection, 'connection_string', 'ConnectionStringHere')
-#We tell the locator to use a service value when resolving\instantiating 'Smtp'
-ServiceLocator.map_parameter_to_service(Smtp, 'postgres_connection', PostgresConnection)
+map_to_type = PostgresConnection
+init_param_name = 'connection_string'
+init_param_value = 'ConnectionStringHere'
+ServiceLocator.map_parameter_to_static(map_to_type, init_param_name, init_param_value)
+#We tell the locator to use a service instance when resolving\instantiating 'Smtp'
+map_to_type = Smtp
+init_param_name = 'postgres_connection'
+init_param_type = PostgresConnection
+ServiceLocator.map_parameter_to_service(map_to_type, init_param_name, init_param_type)
 
-#Resolve
-ServiceLocator.resolve(PostgresConnection)
-ServiceLocator.resolve(Smtp)
-ServiceLocator.resolve(Smtp, 'with_key')
+#Resolve PostgresConnection and use it
+postgres_connection = ServiceLocator.resolve(PostgresConnection)
+db_data = postgres_connection.fetchone()
+
+#Resolve Smtp and use it
+smtp = ServiceLocator.resolve(Smtp)
+smtp = ServiceLocator.resolve(Smtp, 'with_key')
+success = smtp.send_mail('martinswanepoel88@gmail', 'Hello from Python')
 
 ```
     
