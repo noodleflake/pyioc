@@ -2,14 +2,13 @@
 `pyioc` is a single file IoC (or ServiceLocator) in [Python](https://www.python.org) for resolving (locating) services anywhere in your scripts.
 
 # Features
-* [x] Lifetime containers
 * [x] Singleton and Instance containers
-* [x] Automatically resolve instance and pass it onto another objects __init__ function
+* [x] Automatically resolve the __init__ parameter dependancies of an instance
 * [x] Use 'key' and\or 'type' to a resolve a service
 
 ## Installation
 
-	$ git clone github.com/noodleflake/pyioc
+	$ git clone https://github.com/noodleflake/pyioc
     
 ## Sample Usage
 
