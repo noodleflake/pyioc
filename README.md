@@ -19,18 +19,24 @@ In the pyioc repository see `sample` directory
 from libs.service_locator import ServiceLocator
 
 #Singleton Register
-ServiceLocator.register(Smtp())
-ServiceLocator.register(Smtp(), 'with_key')
-ServiceLocator.register(PostgresConnection('ConnectionStringHere'))
+postgres_connection = PostgresConnection('ConnectionStringHere')
+smtp = Smtp(postgres_connection)
+ServiceLocator.register(postgres_connection)
+ServiceLocator.register(smtp)
+ServiceLocator.register(smtp, 'with_key')
 
 #Dynamic Register
+ServiceLocator.register(PostgresConnection)
 ServiceLocator.register(Smtp)
 ServiceLocator.register(Smtp, 'with_key')
-ServiceLocator.register(PostgresConnection)
-#Below we tell the locator to use a static value when resolving\instantiating 'PostgresConnection'
+
+#We tell the locator to use a static value when resolving\instantiating 'PostgresConnection'
 ServiceLocator.map_parameter_to_static(PostgresConnection, 'connection_string', 'ConnectionStringHere')
+#We tell the locator to use a service value when resolving\instantiating 'Smtp'
+ServiceLocator.map_parameter_to_service(Smtp, 'postgres_connection', PostgresConnection)
 
 #Resolve
+ServiceLocator.resolve(PostgresConnection)
 ServiceLocator.resolve(Smtp)
 ServiceLocator.resolve(Smtp, 'with_key')
 
