@@ -3,7 +3,7 @@
 
 # Features
 * [x] Singleton and Instance containers
-* [x] Automatically resolve the \_\_init\_\_ parameter dependancies of an instance
+* [x] Automatically resolve the \_\_init\_\_ function's parameter dependancies
 * [x] Use 'key' and\or 'type' to a resolve a service
 
 ## Installation
